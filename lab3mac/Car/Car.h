@@ -1,4 +1,3 @@
-
 #ifndef CAR_CAR_H
 #define CAR_CAR_H
 
@@ -44,9 +43,10 @@ public:
     bool TurnOffEngine();
     bool SetGear(int gear);
     bool SetSpeed(int speed);
-    bool IsTurnedOn();
-    int GetSpeed();
-    int GetGear();
+    bool IsTurnedOn() const;
+    int GetSpeed() const;
+    int GetGear() const;
+    Direction GetDirection();
 
 private:
     bool m_engineStatus = engineStatus;
@@ -54,4 +54,5 @@ private:
     int m_speed = gearNMinSpeed;
     int m_gear = Gear::GearN;
 };
+
 #endif //CAR_CAR_H
