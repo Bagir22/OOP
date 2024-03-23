@@ -202,6 +202,42 @@ SCENARIO("Gear setting")
 			std::cout << "Test 10 passed" << std::endl;
 		}
 	}
+
+	WHEN("Change from rear gear to forward gear when speed = 0")
+	{
+		std::cout << "Test 11: try to change from rear gear to forward gear when speed = 0" << std::endl;
+		car.TurnOnEngine();
+		REQUIRE(car.IsTurnedOn() == engineStatusOn);
+		car.SetGear(Gear::GearR);
+		REQUIRE(car.GetSpeed() == gearRMinSpeed);
+		THEN("Gear doesn't change")
+		{
+			car.SetGear(Gear::Gear1);
+			REQUIRE(car.GetGear() == Gear::GearR);
+			REQUIRE(car.GetSpeed() == gearRMinSpeed);
+			REQUIRE(car.GetDirection() == Direction::Backward);
+			std::cout << "Test 11 passed" << std::endl;
+		}
+	}
+
+
+	WHEN("Change from rear gear to forward gear when speed != 0")
+	{
+		std::cout << "Test 12: try to change from rear gear to forward gear when speed != 0" << std::endl;
+		car.TurnOnEngine();
+		REQUIRE(car.IsTurnedOn() == engineStatusOn);
+		car.SetGear(Gear::GearR);
+		car.SetSpeed(gearRMaxSpeed);
+		REQUIRE(car.GetSpeed() == gearRMaxSpeed);
+		THEN("Gear doesn't change")
+		{
+			car.SetGear(Gear::Gear1);
+			REQUIRE(car.GetGear() == Gear::GearR);
+			REQUIRE(car.GetSpeed() == gearRMaxSpeed);
+			REQUIRE(car.GetDirection() == Direction::Backward);
+			std::cout << "Test 12 passed" << std::endl;
+		}
+	}
 }
 
 SCENARIO("Speed setting")
@@ -209,19 +245,19 @@ SCENARIO("Speed setting")
 	Car car;
 	WHEN("Change speed while engine off")
 	{
-		std::cout << "Test 11: try to change speed while engine off" << std::endl;
+		std::cout << "Test 13: try to change speed while engine off" << std::endl;
 		REQUIRE(!car.IsTurnedOn());
 		car.SetSpeed(20);
 		THEN("Speed has default value")
 		{
 			REQUIRE(car.GetSpeed() == gearNMinSpeed);
-			std::cout << "Test 11 passed" << std::endl;
+			std::cout << "Test 13 passed" << std::endl;
 		}
 	}
 
 	WHEN("Set speed while engine on and gear is neutral")
 	{
-		std::cout << "Test 12: set speed while engine on and gear is neutral" << std::endl;
+		std::cout << "Test 14: set speed while engine on and gear is neutral" << std::endl;
 		car.TurnOnEngine();
 		REQUIRE(car.IsTurnedOn());
 		REQUIRE(car.GetGear() == Gear::GearN);
@@ -230,14 +266,14 @@ SCENARIO("Speed setting")
 		{
 			REQUIRE(car.GetSpeed() == gearNMinSpeed);
 			REQUIRE(car.GetDirection() == Direction::StandingStill);
-			std::cout << "Test 12 passed" << std::endl;
+			std::cout << "Test 14 passed" << std::endl;
 		}
 	}
 
 
 	WHEN("Set valid speed for current gear while engine on")
 	{
-		std::cout << "Test 13: set valid speed for current gear while engine on" << std::endl;
+		std::cout << "Test 15: set valid speed for current gear while engine on" << std::endl;
 		car.TurnOnEngine();
 		REQUIRE(car.IsTurnedOn());
 		car.SetGear(Gear::Gear1);
@@ -247,13 +283,13 @@ SCENARIO("Speed setting")
 		{
 			REQUIRE(car.GetSpeed() == gear1MaxSpeed);
 			REQUIRE(car.GetDirection() == Direction::Forward);
-			std::cout << "Test 12 passed" << std::endl;
+			std::cout << "Test 15 passed" << std::endl;
 		}
 	}
 
 	WHEN("Set invalid speed for current gear while engine on")
 	{
-		std::cout << "Test 14: set invalid speed for current gear while engine on" << std::endl;
+		std::cout << "Test 16: set invalid speed for current gear while engine on" << std::endl;
 		car.TurnOnEngine();
 		REQUIRE(car.IsTurnedOn());
 		car.SetGear(Gear::Gear1);
@@ -263,13 +299,13 @@ SCENARIO("Speed setting")
 		{
 			REQUIRE(car.GetSpeed() == gear1MinSpeed);
 			REQUIRE(car.GetDirection() == Direction::Forward);
-			std::cout << "Test 14 passed" << std::endl;
+			std::cout << "Test 16 passed" << std::endl;
 		}
 	}
 
 	WHEN("Decrease to valid speed for current gear")
 	{
-		std::cout << "Test 15: decrease to valid speed for current gear" << std::endl;
+		std::cout << "Test 17: decrease to valid speed for current gear" << std::endl;
 		car.TurnOnEngine();
 		REQUIRE(car.IsTurnedOn());
 		car.SetGear(Gear::Gear1);
@@ -284,13 +320,13 @@ SCENARIO("Speed setting")
 		{
 			REQUIRE(car.GetSpeed() == gear2MinSpeed);
 			REQUIRE(car.GetDirection() == Direction::Forward);
-			std::cout << "Test 15 passed" << std::endl;
+			std::cout << "Test 17 passed" << std::endl;
 		}
 	}
 
 	WHEN("Decrease to invalid speed for current gear")
 	{
-		std::cout << "Test 16: decrease to invalid speed for current gear" << std::endl;
+		std::cout << "Test 18: decrease to invalid speed for current gear" << std::endl;
 		car.TurnOnEngine();
 		REQUIRE(car.IsTurnedOn());
 		car.SetGear(Gear::Gear1);
@@ -305,7 +341,7 @@ SCENARIO("Speed setting")
 		{
 			REQUIRE(car.GetSpeed() == gear2MaxSpeed);
 			REQUIRE(car.GetDirection() == Direction::Forward);
-			std::cout << "Test 16 passed" << std::endl;
+			std::cout << "Test 18 passed" << std::endl;
 		}
 	}
 }

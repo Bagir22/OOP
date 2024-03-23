@@ -39,13 +39,15 @@ bool Car::TurnOffEngine() {
 }
 
 bool Car::SetGear(int gear) {
-    if (!IsTurnedOn()) 
+    if (!IsTurnedOn() && gear != Gear::GearN) 
     {
+        std::cout << "Can't set new gear because engine turned off" << std::endl;
         return false;
     }
 
     if (gear < static_cast<int>(Gear::GearR) || gear > static_cast<int>(Gear::Gear5))
     {
+        std::cout << "Can't set gear because new gear not in gear diapason" << std::endl;
         return false;
     }
 
@@ -55,8 +57,9 @@ bool Car::SetGear(int gear) {
         return true;
     }
 
-    if (m_direction == Direction::Backward && gear != static_cast<int>(Gear::GearR)) 
+    if (m_gear == Gear::GearR && gear != Gear::GearN && gear != Gear::GearR)
     {
+        std::cout << "Can't set gear because you can't change rear gear to forward" << std::endl;
         return false;
     }
 
@@ -81,7 +84,9 @@ bool Car::SetGear(int gear) {
 
         return true;
     }
-    else {
+    else 
+    {
+        std::cout << "Can't set new gear because current speed not int new gear speed diapason" << std::endl;
         return false;
     }
 
@@ -90,11 +95,13 @@ bool Car::SetGear(int gear) {
 bool Car::SetSpeed(int speed) {
     if (speed < 0)
     {
+        std::cout << "Can't set speed because new speed lower 0" << std::endl;
         return false;
     }
 
     if (!IsTurnedOn())
     {
+        std::cout << "Can't set speed because engine is off" << std::endl;
         return false;
     }
 
@@ -102,6 +109,7 @@ bool Car::SetSpeed(int speed) {
     {
         if (m_speed <= speed)
         {
+            std::cout << "Can't set speed because current gear is neutral and new speed is bigger than current speed" << std::endl;
             return false;
         }
 
@@ -118,5 +126,6 @@ bool Car::SetSpeed(int speed) {
         return true;
     }
 
+    std::cout << "Can't set speed because new speed isn't in current gear speed range" << std::endl;
     return false;
 }
