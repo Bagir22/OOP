@@ -52,6 +52,14 @@ const speedRangesType speedRanges =
     { Gear::Gear5, {gear5MinSpeed, gear5MaxSpeed} }
 };
 
+const std::string errGearEngineTurnOff = "Can't set new gear because engine turned off\n";
+const std::string errGearNotInGearRange = "Can't set gear because new gear not in gear range\n";
+const std::string errGearRearToForward = "Can't set gear because: can't change rear gear to forward\n";
+const std::string errGearSpeedNotInGearRange = "Can't set new gear because current speed not in new gear speed range\n";
+const std::string errSpeedLower0 = "Can't set speed because new speed lower 0\n";
+const std::string errSpeedEngineTurnOff = "Can't set speed because engine is off\n";
+const std::string errSpeedGearNeutral = "Can't set speed because current gear is neutral and new speed is bigger than current speed\n";
+const std::string errSpeedNotInGearRange = "Can't set speed because new speed isn't in current gear speed range\n";
 
 class Car
 {

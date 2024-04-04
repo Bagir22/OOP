@@ -1,8 +1,10 @@
 #include <iostream>
 #include "../Car/Car.h"
+#include "../Car/CarHandler.h"
 #include <string>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 
 std::vector<std::string> Split(std::string s, std::string delimiter) {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
@@ -41,107 +43,66 @@ bool IsInt(const std::string& byteArg)
     return true;
 }
 
-
-void Info(Car &c)
-{
-    std::cout << "Car info:" << std::endl;
-    std::cout << "Current gear: "  << static_cast<int>(c.GetGear()) << std::endl;
-    std::cout << "Current speed: " << c.GetSpeed() << std::endl;
-
-    bool engineStatus = c.IsTurnedOn();
-
-    if (engineStatus)
-    {
-        std::cout << "Engine: on" << std::endl;
-    }
-    else
-    {
-        std::cout << "Engine: off" << std::endl;
-    }
-
-    int direction = static_cast<int>(c.GetDirection());
-    if (direction == -1)
-    {
-        std::cout << "Current direction: backward" << std::endl;
-    }
-    else if (direction == 1)
-    {
-        std::cout << "Current direction: forward" << std::endl;
-    }
-    else
-    {
-        std::cout << "Current direction: standing still" << std::endl;
-    }
-}
-
-void EngineOn(Car& c)
-{
-    c.TurnOnEngine();
-}
-
-void EngineOff(Car& c)
-{
-    c.TurnOffEngine();
-}
-
-void SetGear(Car& c, int gear)
-{
-    c.SetGear(gear);
-}
-
-void SetSpeed(Car& c, int speed)
-{
-    c.SetSpeed(speed);
-}
-
 int main()
 {
     Car car;
+    CarHandler handler;
+
+    handler.Introduce();
+
     std::string line;
+ 
     while (std::getline(std::cin, line))
-    {
+    {   
         std::vector<std::string> splittedLine = Split(line, " ");
-        bool validCommand = true;
-
-        if (splittedLine[0] != "")
+        int command = 0;
+        int subCommand = 0;
+        if (IsInt(splittedLine[0]))
         {
-            if (splittedLine[0] == "Info")
-            {
-                Info(car);
-            } 
-            else if (splittedLine[0] == "EngineOn")
-            {
-                EngineOn(car);
-            }
-            else if (splittedLine[0] == "EngineOff")
-            {
-                EngineOff(car);
-            }
-            else if (splittedLine.size() == 2 && IsInt(splittedLine[1]))
-            {
-                if (splittedLine[0] == "SetGear")
-                {
-                    SetGear(car, std::stoi(splittedLine[1]));
-                } 
-                else if (splittedLine[0] == "SetSpeed")
-                {
-                    SetSpeed(car, std::stoi(splittedLine[1]));
-                }
-                else
-                {
-                    validCommand = false;
-                }
-            }           
-            else
-            {
-                validCommand = false;
-            }
-
-            if (!validCommand)
-            {
-                std::cout << "Invalid command" << std::endl;
-            }
+            command = stoi(splittedLine[0]);
         }
+
+        if (splittedLine.size() == 2 && IsInt(splittedLine[1]))
+        {
+            subCommand = stoi(splittedLine[1]);
+        }
+        else if (splittedLine.size() == 2)
+        {
+            command = 0;
+        }
+
+        switch(command)
+        {
+            case 1:
+            {
+                handler.Info(car);
+                break;
+            }
+            case 2:
+            {
+                handler.EngineOn(car);
+                break;
+            }
+            case 3:
+            {
+                handler.EngineOff(car);
+                break;
+            }
+            case 4:
+            {
+                handler.SetGear(car, subCommand);
+                break;
+            }
+            case 5:
+            {
+                handler.SetSpeed(car, subCommand);
+                break;
+            }
+            default:
+                std::cout << unknownCommand;
+                break;
+        }
+
     }
 
     return 0;
