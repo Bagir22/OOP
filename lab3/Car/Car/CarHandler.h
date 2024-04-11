@@ -1,5 +1,9 @@
 #pragma once
 #include "Car.h"
+#include "iostream"
+#include <string>
+#include <sstream>
+#include <vector>
 
 const std::string introduceEnter = "Enter command:\n";
 const std::string introduceInfo = "1 - Info(Car info about engine, gear, speed and direction)\n";
@@ -28,7 +32,10 @@ public:
     void EngineOff(Car& c);
     void SetGear(Car& c, int gear);
     void SetSpeed(Car& c, int speed);
+    void CarOperate(Car& c);
 private:
+    std::vector<std::string> Split(std::string s, std::string delimiter);
+    bool IsInt(const std::string& byteArg);
     Car c;
 };
 
