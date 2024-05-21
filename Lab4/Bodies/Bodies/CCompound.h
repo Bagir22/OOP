@@ -14,7 +14,8 @@ public:
 	size_t GetSize() const;
 	std::string GetType() const override;
 	void AddChild(std::shared_ptr<CBody> child);
-	~CCompound();
+	virtual ~CCompound() = default;
+	std::vector<std::shared_ptr<CBody>> GetChilds() const;
 
 private:
 	void AddParent(CCompound* parent);

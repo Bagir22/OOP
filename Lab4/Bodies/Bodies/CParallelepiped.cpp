@@ -8,11 +8,6 @@ CParallelepiped::CParallelepiped(double density, double height, double width, do
 {
 }
 
-CParallelepiped::~CParallelepiped()
-{
-}
-
-
 double CParallelepiped::GetWidth() const
 {
 	return m_width;

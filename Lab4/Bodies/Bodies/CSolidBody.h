@@ -7,7 +7,7 @@ public:
 	CSolidBody(double density);
 	double GetDensity() const override;
 	double GetMass() const override;
-	virtual ~CSolidBody();
+	virtual ~CSolidBody() = default;
 
 private:
 	double m_density;

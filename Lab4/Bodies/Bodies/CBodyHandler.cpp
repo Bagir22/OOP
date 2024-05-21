@@ -18,7 +18,8 @@ void CBodyHandler::Introduce()
 	m_output << ConeExample;
 	m_output << AddCylinderIntro;
 	m_output << CylinderExample;
-	m_output << CompoundMode;
+	m_output << CompoundStartMode;
+	m_output << CompoundEndMode;
 	m_output << MaxMassCommand;
 	m_output << MinWeightCommand;
 	m_output << PrintBoidesCommand;
@@ -63,12 +64,12 @@ bool CBodyHandler::IsInt(const std::string& byteArg)
 	return true;
 }
 
-void CBodyHandler::MaxMass() const
+std::shared_ptr<CBody> CBodyHandler::MaxMass()
 {
 	if (m_bodies.empty())
 	{
 		m_output << MaxMassErr;
-		return;
+		return nullptr;
 	}
 	double maxMass = -DBL_MAX, currentMass = 0;
 	std::shared_ptr<CBody> maxMassBody;
@@ -81,17 +82,16 @@ void CBodyHandler::MaxMass() const
 			maxMassBody = body;
 		}
 	}
-	m_output << MaxMassResult <<  maxMassBody->ToString(strm) << std::endl;
-	return;
-
+	//m_output << MaxMassResult << maxMassBody->ToString(strm) << std::endl;
+	return maxMassBody;
 }
 
-void CBodyHandler::MinWeight() const
+std::shared_ptr<CBody> CBodyHandler::MinWeight()
 {
 	if (m_bodies.empty())
 	{
 		m_output << MinWeightErr;
-		return;
+		return nullptr;
 	}
 	double minWeight = DBL_MAX, currentWeight = 0;
 	std::shared_ptr<CBody> minWeightBody;
@@ -106,8 +106,8 @@ void CBodyHandler::MinWeight() const
 			minWeightBody = body;
 		}
 	}
-	m_output << MinWeightResult << minWeightBody->ToString(strm) << std::endl;
-	return;
+	//m_output << MinWeightResult << minWeightBody->ToString(strm) << std::endl;
+	return minWeightBody;
 }
 
 void CBodyHandler::PrintBodies() const
@@ -169,6 +169,11 @@ void CBodyHandler::AddCylinder(CCylinder cylinder)
 	m_bodies.push_back(std::make_shared<CCylinder>(cylinder));
 }
 
+void CBodyHandler::AddCompound(std::shared_ptr<CCompound> compound)
+{
+	m_bodies.push_back(compound);
+}
+
 CSphere CBodyHandler::CreateSphere(std::vector<std::string> args)
 {
 	double density = stod(args[1]);
@@ -201,7 +206,7 @@ CCylinder CBodyHandler::CreateCylinder(std::vector<std::string> args)
 	return CCylinder(density, radius, height);
 }
 
-void CBodyHandler::CreateCompound()
+std::shared_ptr<CCompound> CBodyHandler::CreateCompound()
 {
 	std::string line;
 	std::shared_ptr<CCompound> compound = std::make_shared<CCompound>();
@@ -277,15 +282,20 @@ void CBodyHandler::CreateCompound()
 				break;
 			}
 
-
 			compound->AddChild(std::make_shared<CCylinder>(CreateCylinder(splittedLine)));
 			break;
 		}
 		case 5:
 		{
-			if (compound->GetSize() != 0) {
-				m_bodies.push_back(compound);
+			std::shared_ptr<CCompound> subCompound = CreateCompound();
+			if (subCompound.get()->GetSize() != 0)
+			{
+				compound->AddChild(subCompound);
 			}
+			break;
+		}
+		case 6:
+		{
 			flag = false;
 			break;
 		}
@@ -296,7 +306,7 @@ void CBodyHandler::CreateCompound()
 	}
 
 	m_output << CompoundModeDisable;
-	return;
+	return compound;
 }
 
 void CBodyHandler::Operate()
@@ -379,25 +389,41 @@ void CBodyHandler::Operate()
 		}
 		case 5:
 		{
-			CreateCompound();
-			break;
-		}
-		case 6:
-		{
-			MaxMass();
+			std::shared_ptr<CCompound> compound = CreateCompound();
+			if (compound.get()->GetSize() != 0) 
+			{
+				AddCompound(compound);
+			}
 			break;
 		}
 		case 7:
 		{
-			MinWeight();
+			std::shared_ptr<CBody> maxMassBody = MaxMass();
+			if (maxMassBody != nullptr)
+			{
+				std::ostringstream strm;
+				m_output << MaxMassResult << maxMassBody->ToString(strm) << std::endl;
+			}
+			
 			break;
 		}
 		case 8:
 		{
-			PrintBodies();
+			std::shared_ptr<CBody> minWeightBody = MinWeight();
+			if (minWeightBody != nullptr)
+			{
+				std::ostringstream strm;
+				m_output << MinWeightResult << minWeightBody->ToString(strm) << std::endl;
+			}
+			
 			break;
 		}
 		case 9:
+		{
+			PrintBodies();
+			break;
+		}
+		case 10:
 		{
 			m_exit = true;
 			PrintBodies();

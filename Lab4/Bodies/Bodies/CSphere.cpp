@@ -7,10 +7,6 @@ CSphere::CSphere(double density, double radius)
 {
 }
 
-CSphere::~CSphere()
-{
-}
-
 double CSphere::GetRadius() const
 {
 	return m_radius;

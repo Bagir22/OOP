@@ -10,7 +10,7 @@ public:
 	double GetRadius() const;
 	double GetVolume() const override;
 	std::string GetType() const override;
-	~CSphere();
+	virtual ~CSphere() = default;
 
 private:
 	void AppendProperties(std::ostringstream& strm) const override;

@@ -60,18 +60,21 @@ void CCompound::AddChild(std::shared_ptr<CBody> child)
 	m_childs.push_back(child);
 }
 
-CCompound::~CCompound()
+std::vector<std::shared_ptr<CBody>> CCompound::GetChilds() const
 {
+	return m_childs;
 }
 
 void CCompound::AppendProperties(std::ostringstream& output) const
 {
-	output << ChildBodies;
+	output << ChildBodies << "\n";
 	for (auto& ptr : m_childs)
 	{
-		std::string type = ptr->GetType();
-		output << type << " ";
-		if (type == CompoundType)
+		output << "\t\t" << ptr->GetType() << "\n";
+		output << "\t\t\t" << Density << ptr->GetDensity() << "\n";
+		output << "\t\t\t" << Mass << ptr->GetMass() << "\n";
+		output << "\t\t\t" << Volume << ptr->GetVolume() << "\n";
+		if (ptr->GetType() == CompoundType)
 		{
 			output << "\n";
 			ptr->ToString(output);

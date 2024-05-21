@@ -8,10 +8,6 @@ CCylinder::CCylinder(double density, double baseRadius, double height)
 {
 }
 
-CCylinder::~CCylinder()
-{
-}
-
 double CCylinder::GetBaseRadius() const
 {
 	return m_baseRadius;

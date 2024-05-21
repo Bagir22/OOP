@@ -4,11 +4,6 @@ CBody::CBody()
 {
 }
 
-CBody::~CBody()
-{
-}
-
-
 std::string CBody::ToString(std::ostringstream& strm) const
 {
 	strm << GetType() << ":" << std::endl

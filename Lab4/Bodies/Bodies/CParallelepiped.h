@@ -12,7 +12,7 @@ public:
 	double GetDepth() const;
 	double GetVolume() const;
 	std::string GetType() const override;
-	~CParallelepiped();
+	virtual ~CParallelepiped() = default;
 
 private:
 	void AppendProperties(std::ostringstream& strm) const override;

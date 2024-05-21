@@ -23,7 +23,7 @@ public:
 	virtual double GetMass() const = 0;
 	std::string ToString(std::ostringstream& output) const;
 	virtual std::string GetType() const = 0;
-	virtual ~CBody();
+	virtual ~CBody() = default;
 	
 private:
 	virtual void AppendProperties(std::ostringstream& strm) const = 0;

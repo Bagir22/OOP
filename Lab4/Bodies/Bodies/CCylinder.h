@@ -11,7 +11,7 @@ public:
 	double GetHeight() const;
 	double GetVolume() const override;
 	std::string GetType() const override;
-	~CCylinder();
+	virtual ~CCylinder() = default;
 
 private:
 	void AppendProperties(std::ostringstream& strm) const;

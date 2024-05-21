@@ -29,10 +29,6 @@ std::string CCone::GetType() const
 	return ConeType;
 }
 
-CCone::~CCone()
-{
-}
-
 void CCone::AppendProperties(std::ostringstream& strm) const
 {
 	strm << Radius << GetBaseRadius() << std::endl
