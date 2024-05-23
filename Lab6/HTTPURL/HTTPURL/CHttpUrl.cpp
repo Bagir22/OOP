@@ -10,8 +10,8 @@ const std::regex urlRegex = std::regex(protocolRegex + domainRegexStr + portRege
 const std::regex domainRegex = std::regex(domainRegexStr);
 const std::regex documentRegex = std::regex("([\\S]*)?");
 
-const int MIN_PORT = 1;
-const int MAX_PORT = 65535;
+const int MinPort = 1;
+const int MaxPort = 65535;
 
 const short HttpPort = 80;
 const short HttpsPort = 443;
@@ -85,7 +85,7 @@ unsigned short ParsePort(std::string const& stringPort, Protocol protocol)
 		throw CUrlParsingError(InvalidPortErr);
 	}
 
-	if (portNumber < MIN_PORT || portNumber > MAX_PORT)
+	if (portNumber < MinPort || portNumber > MaxPort)
 	{
 		throw CUrlParsingError(InvalidPortErr);
 	}
@@ -107,9 +107,15 @@ bool IsValidDocument(std::string const& document)
 
 std::string CHttpUrl::NormalaizeDocument(const std::string& document)
 {
-	if (document[0] == Slash)
+	if (document.empty())
+	{
+		return std::string(1, Slash);
+	}
+	else if (document[0] == Slash)
+	{
 		return document;
-	
+	}
+		
 	return Slash + document;
 }
 
@@ -117,19 +123,19 @@ CHttpUrl::CHttpUrl(std::string const& url)
 {
 	std::string lowerUrl = StringToLowerCase(url);
 
-	std::smatch matches;
+	std::smatch urlMatches;
 
-	if (!std::regex_match(lowerUrl, matches, urlRegex))
+	if (!std::regex_match(lowerUrl, urlMatches, urlRegex))
 	{
 		throw CUrlParsingError(InvalidUrlErr);
 	}
 
 	try
 	{
-		m_domain = matches[2];
-		m_document = NormalaizeDocument(matches[4]);
-		m_protocol = ParseProtocol(matches[1]);
-		m_port = ParsePort(matches[3], m_protocol);
+		m_domain = urlMatches[2];
+		m_document = NormalaizeDocument(urlMatches[4]);
+		m_protocol = ParseProtocol(urlMatches[1]);
+		m_port = ParsePort(urlMatches[3], m_protocol);
 	}
 	catch (const CUrlParsingError& err)
 	{
@@ -165,6 +171,7 @@ std::string CHttpUrl::GetURL() const
 {
 	std::string url;
 	url += ProtocolToString(m_protocol) + ProtocolPostfix + m_domain + PortPrefix + std::to_string(m_port) + m_document;
+
 	return url;
 }
 

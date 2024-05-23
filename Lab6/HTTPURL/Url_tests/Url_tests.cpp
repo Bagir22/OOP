@@ -38,6 +38,7 @@ TEST_CASE("Valid urls check")
 		std::cout << "Test 6: Url only with httpprotocol and some valid port\n";
 
 		CHttpUrl url("http://localhost:8080");
+
 		REQUIRE(url.GetProtocol() == Protocol::HTTP);
 		REQUIRE(url.GetDomain() == "localhost");
 		REQUIRE(url.GetDocument() == "/");
