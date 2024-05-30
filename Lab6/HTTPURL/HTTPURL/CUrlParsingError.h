@@ -4,5 +4,5 @@
 class CUrlParsingError : public std::invalid_argument
 {
 public:
-	CUrlParsingError(std::string const& err);
+	explicit CUrlParsingError(std::string const& err);
 };

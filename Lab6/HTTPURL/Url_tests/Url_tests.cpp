@@ -54,7 +54,6 @@ TEST_CASE("Invalid urls check")
 	{
 		std::cout << "Test 3: Empty url\n";
 
-
 		try
 		{
 			CHttpUrl url("");
@@ -71,7 +70,6 @@ TEST_CASE("Invalid urls check")
 	SECTION("Url only without protocol")
 	{
 		std::cout << "Test 4: Url only without protocol\n";
-
 		
 		try
 		{
@@ -89,7 +87,6 @@ TEST_CASE("Invalid urls check")
 	SECTION("Url only with invalid protocol")
 	{
 		std::cout << "Test 5: Url only with invalid protocol\n";
-
 
 		try
 		{
@@ -226,9 +223,9 @@ TEST_CASE("Check Url with domain, document, protocol and ort")
 		std::cout << "Test 13 passed\n";
 	}
 
-	SECTION("Url with domain, document, protocol and port higer than max port")
+	SECTION("Url with domain, document, protocol and port bigger than max port")
 	{
-		std::cout << "Test 14: Url with domain, document, protocol and port lower than max port\n";
+		std::cout << "Test 14: Url with domain, document, protocol and port bigger than max port\n";
 		try
 		{
 			CHttpUrl url("google.com", "/document", Protocol::HTTP, 65536);
@@ -240,4 +237,40 @@ TEST_CASE("Check Url with domain, document, protocol and ort")
 		}
 		std::cout << "Test 14 passed\n";
 	}
+}
+
+TEST_CASE("Check backslash") 
+{
+	std::cout << "Test 15: Check backslash\n";
+
+	CHttpUrl url("http:\\\\google.com\\document");
+	REQUIRE(url.GetProtocol() == Protocol::HTTP);
+	REQUIRE(url.GetDomain() == "google.com");
+	REQUIRE(url.GetDocument() == "/document");
+	REQUIRE(url.GetPort() == 80);
+
+	std::cout << "Test 15 passed\n";
+}
+
+TEST_CASE("Check few slashes")
+{
+	std::cout << "Test 16: Check few slashes\n";
+
+	try
+	{
+		CHttpUrl url("http://///google.com//document");
+	}
+	catch (const std::exception& e)
+	{
+		std::string err = e.what();
+		REQUIRE(err == "Invalid url");
+	}
+
+	CHttpUrl url("http://google.com////document");
+	REQUIRE(url.GetProtocol() == Protocol::HTTP);
+	REQUIRE(url.GetDomain() == "google.com");
+	REQUIRE(url.GetDocument() == "////document");
+	REQUIRE(url.GetPort() == 80);
+
+	std::cout << "Test 16 passed\n";
 }

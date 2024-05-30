@@ -10,6 +10,25 @@ enum class Protocol
     HTTPS
 };
 
+const int MinPort = 1;
+const int MaxPort = 65535;
+
+const short HttpPort = 80;
+const short HttpsPort = 443;
+
+const char Slash = '/';
+const std::string Http = "http";
+const std::string Https = "https";
+
+const std::string InvalidUrlErr = "Invalid url";
+const std::string InvalidPortErr = "Invalid port";
+const std::string InvalidDomainErr = "Invalid domain";
+const std::string InvalidDocumentErr = "Invalid document";
+const std::string InvalidProtocolErr = "Invalid protocol";
+
+const std::string ProtocolPostfix = "://";
+const std::string PortPrefix = ":";
+
 class CHttpUrl
 {
 public:
